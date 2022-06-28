@@ -27,3 +27,4 @@ jobs:
               run: pnpm wrangler publish
               env:
                   CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+                  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
