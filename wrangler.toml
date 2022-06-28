@@ -1,0 +1,11 @@
+name = "module-worker"
+workers_dev = true
+compatibility_date = "2022-05-27"
+main = "./dist/index.js"
+
+[build]
+command = "npm run -s build"
+
+[[rules]]
+type = "ESModule"
+globs = ["**/*.js"]
