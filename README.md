@@ -5,7 +5,31 @@ More cron jobs? No problem!
 ## How to use
 
 1. Fork the repository.
-2. Change the `src/tasks.ts`.
+2. Edit `src/tasks.ts`.
+```ts
+export const tasks: Task[] = [
+    [
+        "my-task-1",
+        "0/5 * * * *",
+        async function (cron: Cron): Promise<[boolean, string]> {
+            const value = Math.random();
+            const success = value > 0.5;
+            return [success, `The value is ${value}.`];
+        },
+    ],
+    [
+        "ping Google",
+        "@minutely",
+        async function (cron: Cron): Promise<[boolean, string]> {
+            const start = Date.now();
+            const res = await fetch("https://www.google.com");
+            const end = Date.now();
+
+            return [res.ok, `${res.status} (${end - start}ms)`];
+        },
+    ],
+];
+```
 3. Publish to Cloudflare Worker.
 
 You may want to set environment variable `KEY` if you don't want other people to manually trigger your cron job.
