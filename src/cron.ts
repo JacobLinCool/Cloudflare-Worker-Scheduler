@@ -42,11 +42,9 @@ function check(value: string, current: number): boolean {
 
     for (const v of bucket) {
         if (v.includes("/")) {
-            const [start, step] = value.split("/");
-            const start_num = Number(start);
-            const step_num = Number(step);
+            const [start, step] = value.split("/").map(Number);
 
-            if (start_num <= current && current % step_num === 0) {
+            if (start <= current && (current - start) % step === 0) {
                 return true;
             }
         }

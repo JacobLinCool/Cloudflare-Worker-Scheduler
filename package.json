@@ -10,7 +10,7 @@
         "test": "jest --coverage",
         "prepare": "npm run build",
         "dev": "wrangler dev",
-        "build": "esbuild src/index.ts --outfile=dist/index.js --bundle --minify --format=esm",
+        "build": "esbuild src/index.ts --outfile=dist/index.js --bundle --minify --format=esm --loader:.html=text",
         "format": "prettier --write '**/*.{js,ts,jsx,tsx,json,yml,yaml,md,html}' --ignore-path .gitignore",
         "lint": "eslint ."
     },

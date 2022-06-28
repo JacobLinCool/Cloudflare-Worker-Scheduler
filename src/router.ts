@@ -8,6 +8,7 @@ import { Router } from "itty-router";
 import append from "./headers";
 import { tasks } from "./tasks";
 import { run } from "./runner";
+import dashboard from "./dashboard/index.html";
 
 const router = Router<Request>();
 
@@ -47,6 +48,10 @@ router.get("/trigger", async (req, env: { kv: KVNamespace; KEY: string }) => {
     } else {
         return new Response("task and key is required.", { status: 401, headers: append(new Headers(), "text") });
     }
+});
+
+router.get("/", async () => {
+    return new Response(dashboard, { status: 200, headers: append(new Headers(), "html") });
 });
 
 router.get("*", async () => {
