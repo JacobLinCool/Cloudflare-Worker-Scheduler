@@ -1,7 +1,14 @@
-name = "module-worker"
+name = "scheduler"
 workers_dev = true
 compatibility_date = "2022-05-27"
 main = "./dist/index.js"
+
+kv_namespaces = [
+  { binding = "kv", id = "9f8921bb1402461a93f14fc26f334400", preview_id = "9f8921bb1402461a93f14fc26f334400" }
+]
+
+[triggers]
+crons = ["* * * * *"]
 
 [build]
 command = "npm run -s build"

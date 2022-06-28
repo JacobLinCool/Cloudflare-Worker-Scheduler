@@ -4,39 +4,53 @@
  * The exported `router` will be used by the `fetch` function in `index.ts`.
  */
 
-// #region Setup Router
 import { Router } from "itty-router";
-import { get_rewriter } from "./rewriter";
 import append from "./headers";
+import { tasks } from "./tasks";
+import { run } from "./runner";
+
 const router = Router<Request>();
-// #endregion
 
-// #region Proxy
-router.get("/proxy", async (req) => {
-    const url = new URL(req.query?.url || "");
-    const res = await fetch(url.href);
+router.get("/list", async (req, env: { kv: KVNamespace; KEY: string }) => {
+    if (typeof req.query?.key === "string" && req.query.key === env.KEY) {
+        const list = tasks.reduce<Record<string, string>>((acc, [name, cron]) => {
+            acc[name] = cron;
+            return acc;
+        }, {});
 
-    const headers = append(res.headers, "cors");
-
-    if (res.headers.get("Content-Type")?.includes("text/html")) {
-        const rewriter = get_rewriter(url.origin, new URL(req.url).origin + "/proxy?url=" + url.origin);
-        return new Response(rewriter.transform(res).body, { status: 200, headers });
+        return new Response(JSON.stringify(list, null, 4), { status: 200, headers: append(new Headers(), "json") });
+    } else {
+        return new Response("key is required.", { status: 401, headers: append(new Headers(), "text") });
     }
-
-    return new Response(res.body, { status: 200, headers });
 });
-// #endregion
 
-// #region GitHub Redirection
-router.get("/github*", async () => {
-    return Response.redirect("https://github.com/JacobLinCool", 301);
+router.get("/log", async (req, env: { kv: KVNamespace; KEY: string }) => {
+    if (typeof req.query?.key === "string" && req.query.key === env.KEY) {
+        return new Response(JSON.stringify((await env.kv.get("schedule-logs", "json")) || [], null, 4), {
+            status: 200,
+            headers: append(new Headers(), "json"),
+        });
+    } else {
+        return new Response("key is required.", { status: 401, headers: append(new Headers(), "text") });
+    }
 });
-// #endregion
 
-// #region Fallback
-router.get("*", async (req) => {
-    return new Response(JSON.stringify(req, null, 4), { status: 404, headers: append(new Headers(), "json") });
+router.get("/trigger", async (req, env: { kv: KVNamespace; KEY: string }) => {
+    if (typeof req.query?.task === "string" && typeof req.query?.key === "string" && req.query.key === env.KEY) {
+        const task = tasks.find(([name]) => name === req.query?.task);
+        if (task) {
+            const [success, message] = await run(task, [-1, -1, -1, -1, -1]);
+            return new Response(JSON.stringify({ success, message }, null, 4), { status: 200, headers: append(new Headers(), "text") });
+        } else {
+            return new Response("task is not found.", { status: 401, headers: append(new Headers(), "text") });
+        }
+    } else {
+        return new Response("task and key is required.", { status: 401, headers: append(new Headers(), "text") });
+    }
 });
-// #endregion
+
+router.get("*", async () => {
+    return new Response("Not Found.", { status: 404, headers: append(new Headers(), "text") });
+});
 
 export default router;

@@ -1,8 +1,11 @@
 {
-    "name": "cloudflare-module-worker",
+    "name": "cloudflare-worker-scheduler",
     "version": "0.1.0",
-    "description": "A module worker template.",
-    "main": "lib/index.js",
+    "description": "More cron jobs? No problem!",
+    "author": "JacobLinCool <hi@jacoblin.cool> (https://github.com/JacobLinCool)",
+    "license": "MIT",
+    "keywords": [],
+    "main": "dist/index.js",
     "scripts": {
         "test": "jest --coverage",
         "prepare": "npm run build",
@@ -11,30 +14,26 @@
         "format": "prettier --write '**/*.{js,ts,jsx,tsx,json,yml,yaml,md,html}' --ignore-path .gitignore",
         "lint": "eslint ."
     },
-    "keywords": [],
-    "author": "JacobLinCool <jacoblincool@gmail.com> (https://github.com/JacobLinCool)",
-    "license": "MIT",
-    "types": "lib/index.d.ts",
     "files": [
-        "lib"
+        "dist"
     ],
-    "devDependencies": {
-        "@cloudflare/workers-types": "^3.11.0",
-        "@types/jest": "^27.5.1",
-        "@types/node": "^17.0.35",
-        "@typescript-eslint/eslint-plugin": "^5.26.0",
-        "@typescript-eslint/parser": "^5.26.0",
-        "esbuild": "^0.14.40",
-        "eslint": "^8.16.0",
-        "eslint-config-prettier": "^8.5.0",
-        "jest": "^27.5.1",
-        "prettier": "^2.6.2",
-        "ts-jest": "^27.1.5",
-        "tsup": "^5.12.9",
-        "typescript": "^4.7.2",
-        "wrangler": "^2.0.6"
-    },
     "dependencies": {
         "itty-router": "^2.6.1"
+    },
+    "devDependencies": {
+        "@cloudflare/workers-types": "^3.13.0",
+        "@types/jest": "^27.5.2",
+        "@types/node": "^17.0.45",
+        "@typescript-eslint/eslint-plugin": "^5.30.0",
+        "@typescript-eslint/parser": "^5.30.0",
+        "esbuild": "^0.14.47",
+        "eslint": "^8.18.0",
+        "eslint-config-prettier": "^8.5.0",
+        "jest": "^27.5.1",
+        "prettier": "^2.7.1",
+        "ts-jest": "^27.1.5",
+        "tsup": "^5.12.9",
+        "typescript": "^4.7.4",
+        "wrangler": "^2.0.15"
     }
 }
