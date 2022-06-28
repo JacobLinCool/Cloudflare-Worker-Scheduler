@@ -1,52 +1,31 @@
-# Cloudflare Module Worker
+# Cloudflare Worker Scheduler
 
-A Module Worker Template for Cloudflare Workers.
+More cron jobs? No problem!
 
-You can use this template to build a CORS proxy, an API server, or serving static files.
+## How to use
 
-## Features
+1. Fork the repository.
+2. Change the `src/tasks.ts`.
+3. Publish to Cloudflare Worker.
 
--   📦 Fast Bundling and Minification (by [esbuild](https://esbuild.github.io/))
--   🗂 Express-like Routing (by [itty-router](https://github.com/kwhitley/itty-router))
--   ⚙️ Linting and Testing (by [ESLint](https://eslint.org/) & [Jest](https://jestjs.io/))
--   🌈 Source Formatting (by [Prettier](https://prettier.io/))
--   🦾 TypeScript Supported (by [TypeScript](https://www.typescriptlang.org/))
--   🚦 GitHub Action CI/CD (Auto Deploy, Pull Request Check).
--   🛠 Utility Function: [Headers](./src/headers.ts).
+You may want to set environment variable `KEY` if you don't want other people to manually trigger your cron job.
 
-## Usage
+## Endpoints
 
-You can use `npm`, `yarn` or `pnpm` to install the dependencies. And I recommend you to use `pnpm`, which works well with this template.
+There are some endpoints for you to checkout the log and manually trigger the task.
 
-There are some scripts in the package.json file:
+### `/list?key=YOUR_KEY`
 
-- `build`: Build the module worker.
-  - Bundled & Minified
-  - Stored in `dist` directory
-- `dev`: Build the module worker.
-  - Run `wrangler dev`
-  - Visit via `http://127.0.0.1:8787`
-  - Console logs are shown in the terminal
-- `test`: Run tests using `Jest`.
-  - Coverage report will be stored in `coverage` directory
-- `lint`: Run linting and testing using `ESLint`.
-  - Linting rules are stored in `.eslintrc.js`
-  - Files and directories in `.eslintignore` will be ignored
-- `format`: Format the source code using `prettier`.
-  - Rules are stored in `.prettierrc`
+List all tasks with their cron settings.
 
-If you want to publish the module worker, you can use `wrangler publish`.
+### `/log?key=YOUR_KEY`
 
-### GitHub Action Auto Deploy
+Checkout the log of the last `LOG_MAX_LENGTH` executed tasks.
 
-Provide a `CF_API_TOKEN` secret to enable auto deploy.
+> `LOG_MAX_LENGTH` is set to `100` by default and can be changed in `src/constants.ts`.
 
-The workflow is here: [publish_worker.yml](./.github/workflows/publish_worker.yml)
+### `/trigger?key=YOUR_KEY&task=TASK_NAME`
 
-## Notice
+Manually trigger a task.
 
-### Don't Push to Main Branch
-
-Push to other branches and make a PR to the main branch, by doing so, the GitHub Action will check your PR is working before merging it.
-
-Push directly to the main branch will trigger a deploy process immediately without checking your the new code is working or not.
+> The result will not be logged because this method will respond with the result of the task directly.
