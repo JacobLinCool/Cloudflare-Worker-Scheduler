@@ -32,8 +32,9 @@ export default {
         const results = await Promise.all(runners);
 
         if (results.length) {
-            const logs = (await environment.kv.get<{ time: Cron; results: [string, boolean, string][] }[]>("schedule-logs", "json")) ?? [];
-            logs.push({ time: CRON, results });
+            const logs =
+                (await environment.kv.get<{ time: number; results: [string, boolean, string][] }[]>("schedule-logs", "json")) ?? [];
+            logs.push({ time: DATE.getTime(), results });
             if (logs.length > LOG_MAX_LENGTH) {
                 logs.shift();
             }
