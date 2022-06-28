@@ -1,6 +1,6 @@
 # Cloudflare Worker Scheduler
 
-More cron jobs? No problem!
+More cron jobs on Cloudflare Workers? No problem! A dashboard is also included!
 
 ## How to use
 
@@ -37,6 +37,10 @@ You may want to set environment variable `KEY` if you don't want other people to
 ## Endpoints
 
 There are some endpoints for you to checkout the log and manually trigger the task.
+
+### `/`
+
+Web Interface Dashboard.
 
 ### `/list?key=YOUR_KEY`
 
