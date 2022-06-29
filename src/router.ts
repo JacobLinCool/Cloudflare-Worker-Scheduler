@@ -8,11 +8,12 @@ import { Router } from "itty-router";
 import append from "./headers";
 import { tasks } from "./tasks";
 import { run } from "./runner";
+import { GistStore } from "worker-gist";
 import dashboard from "./dashboard/index.html";
 
 const router = Router<Request>();
 
-router.get("/list", async (req, env: { kv: KVNamespace; KEY: string }) => {
+router.get("/list", async (req, env: { kv: KVNamespace; KEY: string; PAT: string; GIST: string }) => {
     if (typeof req.query?.key === "string" && req.query.key === env.KEY) {
         const list = tasks.reduce<Record<string, string>>((acc, [name, cron]) => {
             acc[name] = cron;
@@ -25,9 +26,10 @@ router.get("/list", async (req, env: { kv: KVNamespace; KEY: string }) => {
     }
 });
 
-router.get("/log", async (req, env: { kv: KVNamespace; KEY: string }) => {
+router.get("/log", async (req, env: { kv: KVNamespace; KEY: string; PAT: string; GIST: string }) => {
     if (typeof req.query?.key === "string" && req.query.key === env.KEY) {
-        return new Response(JSON.stringify((await env.kv.get("schedule-logs", "json")) || [], null, 4), {
+        const store = new GistStore(env.kv, env.PAT);
+        return new Response((await store.get("logs")) || JSON.stringify([]), {
             status: 200,
             headers: append(new Headers(), "json"),
         });
