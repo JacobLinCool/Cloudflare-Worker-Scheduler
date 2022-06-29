@@ -20,9 +20,6 @@ jobs:
                   version: latest
                   run_install: true
 
-            - name: Build Worker
-              run: pnpm build
-
             - name: Publish to Cloudflare
               run: pnpm wrangler publish
               env:
