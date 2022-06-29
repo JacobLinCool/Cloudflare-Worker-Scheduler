@@ -26,6 +26,3 @@ jobs:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
                   package-manager: pnpm
                   skip-step: install
-
-            - name: Build
-              run: pnpm run build

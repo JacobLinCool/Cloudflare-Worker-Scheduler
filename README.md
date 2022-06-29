@@ -6,6 +6,7 @@ More cron jobs on Cloudflare Workers? No problem! A dashboard is also included!
 
 1. Fork the repository.
 2. Edit `src/tasks.ts`.
+
 ```ts
 export const tasks: Task[] = [
     [
@@ -30,9 +31,14 @@ export const tasks: Task[] = [
     ],
 ];
 ```
-3. Publish to Cloudflare Worker.
 
-You may want to set environment variable `KEY` if you don't want other people to manually trigger your cron job.
+3. Publish to Cloudflare Worker.
+4. Setup the environment variables.
+
+### Environment Variables
+
+- `PAT`: Required. The GitHub Personal Access Token with the `gist` scope, which is used to update private gist as logfile.
+- `KEY`: Optional. The password to protect your dashboard and other API.
 
 ## Endpoints
 
